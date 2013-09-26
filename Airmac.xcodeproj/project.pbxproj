@@ -41,7 +41,7 @@
 		29B97324FDCFA39411CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
 		29B97325FDCFA39411CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
 		8D1107310486CEB800E47090 /* Airmac-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Airmac-Info.plist"; sourceTree = "<group>"; };
-		8D1107320486CEB800E47090 /* Airmac.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Airmac.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		8D1107320486CEB800E47090 /* nAirPlayMac.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = nAirPlayMac.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FE3E67FE137B0ECC00E72999 /* icon-big-white.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = "icon-big-white.icns"; sourceTree = "<group>"; };
 		FE3E69C2137B2A1200E72999 /* black.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = black.jpg; sourceTree = "<group>"; };
 		FE70A48F1379C4420045737E /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
@@ -113,7 +113,7 @@
 		19C28FACFE9D520D11CA2CBB /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				8D1107320486CEB800E47090 /* Airmac.app */,
+				8D1107320486CEB800E47090 /* nAirPlayMac.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -190,7 +190,7 @@
 			name = Airmac;
 			productInstallPath = "$(HOME)/Applications";
 			productName = Airmac;
-			productReference = 8D1107320486CEB800E47090 /* Airmac.app */;
+			productReference = 8D1107320486CEB800E47090 /* nAirPlayMac.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -288,7 +288,7 @@
 				GCC_PREFIX_HEADER = Airmac_Prefix.pch;
 				INFOPLIST_FILE = "Airmac-Info.plist";
 				INSTALL_PATH = "$(HOME)/Applications";
-				PRODUCT_NAME = Airmac;
+				PRODUCT_NAME = nAirPlayMac;
 			};
 			name = Debug;
 		};
@@ -303,7 +303,7 @@
 				GCC_PREFIX_HEADER = Airmac_Prefix.pch;
 				INFOPLIST_FILE = "Airmac-Info.plist";
 				INSTALL_PATH = "$(HOME)/Applications";
-				PRODUCT_NAME = Airmac;
+				PRODUCT_NAME = nAirPlayMac;
 			};
 			name = Release;
 		};
