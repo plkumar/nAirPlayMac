@@ -347,29 +347,10 @@
 	
     if ([method isEqual:@"GET"]) {
         NSURL *uri = [(NSURL *)CFHTTPMessageCopyRequestURL(request) autorelease];
-		NSLog(@"uri : %@",[uri absoluteURL]);
+        NSLog(@"(GET) URI : %@",uri);
 
-		//if ([[uri absoluteString] hasPrefix:@"/server-info"] || [[uri absoluteString] hasSuffix:@"/server-info"])
         if([[uri absoluteString] containsString:@"/server-info" inString:[uri absoluteString]])
 		{
-			
-//			NSData *data = [[NSString stringWithFormat:@"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\
-//<!DOCTYPE plist PUBLIC \"-//Apple//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">\n\
-//<plist version=\"1.0\">\n\
-//<dict>\n\
-//\t<key>deviceid</key>\n\
-//\t<string>94:0C:6D:E6:80:56</string>\n\
-//\t<key>features</key>\n\
-//\t<integer>119</integer>\n\
-//\t<key>model</key>\n\
-//\t<string>AppleTV2,1</string>\n\
-//\t<key>protovers</key>\n\
-//\t<string>1.0</string>\n\
-//\t<key>srcvers</key>\n\
-//\t<string>101.28</string>\n\
-//</dict>\n\
-//</plist>\n"] dataUsingEncoding: NSASCIIStringEncoding];
-            
             NSData *data = [[NSString stringWithFormat:@"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\
                              <!DOCTYPE plist PUBLIC \"-//Apple//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">\n\
                              <plist version=\"1.0\">\n\
@@ -377,7 +358,7 @@
                              \t<key>deviceid</key>\n\
                              \t<string>94:0C:6D:E6:80:56</string>\n\
                              \t<key>features</key>\n\
-                             \t<integer>8191</integer>\n\
+                             \t<integer>14839</integer>\n\
                              \t<key>model</key>\n\
                              \t<string>AppleTV2,1</string>\n\
                              \t<key>protovers</key>\n\
@@ -390,12 +371,15 @@
 			 
 			CFHTTPMessageRef response = CFHTTPMessageCreateResponse(kCFAllocatorDefault, 200, NULL, kCFHTTPVersion1_1); // OK
 			
-			// Datum meesturen
+			// Send Date
 			
 			CFHTTPMessageSetHeaderFieldValue(response, (CFStringRef)@"Date", (CFStringRef)[NSString stringWithFormat:@"%@",date]);
 
 			CFHTTPMessageSetHeaderFieldValue(response, (CFStringRef)@"Content-Type", (CFStringRef)[NSString stringWithFormat:@"application/x-apple-plist+xml"]);
-			CFHTTPMessageSetHeaderFieldValue(response, (CFStringRef)@"Content-Length", (CFStringRef)[NSString stringWithFormat:@"%lu", (unsigned long)[data length]]);
+            
+            NSLog(@"Data Length %@", [NSString stringWithFormat:@"%lu", (unsigned long)[data length]]);
+			
+            CFHTTPMessageSetHeaderFieldValue(response, (CFStringRef)@"Content-Length", (CFStringRef)[NSString stringWithFormat:@"%lu", (unsigned long)[data length]]);
 			CFHTTPMessageSetHeaderFieldValue(response, (CFStringRef)@"X-Apple-Session-Id", (CFStringRef)[NSString stringWithFormat:@"00000000-0000-0000-0000-000000000000"]);
 			
 			
@@ -409,6 +393,7 @@
 		if ([[uri absoluteString] containsString:@"/slideshow-features"])
 		{
 			
+            NSLog(@"SlideShow-features : %@", uri);
 			
 			/*<?xml version="1.0" encoding="UTF-8"?>
 			 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
