@@ -541,7 +541,24 @@
 		NSURL *uri = [(NSURL *)CFHTTPMessageCopyRequestURL(request) autorelease];
 		NSLog(@"(POST) URI : %@",uri);
 		
-		if ([[uri absoluteString] containsString:@"/reverse"])
+        if([[uri absoluteString] containsString:@"/fp-setup"]){
+            
+            NSData *Body = [(NSData *)CFHTTPMessageCopyBody(request) autorelease];
+			NSString *bodyString = [[NSString alloc] initWithData:Body encoding:NSASCIIStringEncoding];
+            NSLog(@"Body: %@", bodyString);
+            
+            CFHTTPMessageRef response = CFHTTPMessageCreateResponse(kCFAllocatorDefault, 101, NULL, kCFHTTPVersion1_1); // Switching Protocols
+			CFHTTPMessageSetHeaderFieldValue(response, (CFStringRef)@"Date", (CFStringRef)[NSString stringWithFormat:@"%@",date]);
+			CFHTTPMessageSetHeaderFieldValue(response, (CFStringRef)@"Upgrade", (CFStringRef)[NSString stringWithFormat:@"PTTH/1.0"]);
+			CFHTTPMessageSetHeaderFieldValue(response, (CFStringRef)@"Connection", (CFStringRef)[NSString stringWithFormat:@"Upgrade"]);
+			//CFHTTPMessageSetBody(response, (CFDataRef)data);
+			[mess setResponse:response];
+			CFRelease(response);
+			
+			return;
+            
+        }
+		else if ([[uri absoluteString] containsString:@"/reverse"])
 		{
 			
 						
