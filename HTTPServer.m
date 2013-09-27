@@ -496,7 +496,7 @@
 			
 			
 		}
-        if([[uri absoluteString] hasSuffix:@"/stream.xml"])
+        else if([[uri absoluteString] hasSuffix:@"/stream.xml"])
         {
             NSData *data = [[NSString stringWithFormat:@"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\
             \t <!DOCTYPE plist PUBLIC \"-//Apple//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\"> \n\
@@ -548,15 +548,19 @@
             NSLog(@"Body: %@", bodyString);
             
             CFHTTPMessageRef response = CFHTTPMessageCreateResponse(kCFAllocatorDefault, 101, NULL, kCFHTTPVersion1_1); // Switching Protocols
-			CFHTTPMessageSetHeaderFieldValue(response, (CFStringRef)@"Date", (CFStringRef)[NSString stringWithFormat:@"%@",date]);
-			CFHTTPMessageSetHeaderFieldValue(response, (CFStringRef)@"Upgrade", (CFStringRef)[NSString stringWithFormat:@"PTTH/1.0"]);
-			CFHTTPMessageSetHeaderFieldValue(response, (CFStringRef)@"Connection", (CFStringRef)[NSString stringWithFormat:@"Upgrade"]);
+//			CFHTTPMessageSetHeaderFieldValue(response, (CFStringRef)@"Date", (CFStringRef)[NSString stringWithFormat:@"%@",date]);
+//			CFHTTPMessageSetHeaderFieldValue(response, (CFStringRef)@"Upgrade", (CFStringRef)[NSString stringWithFormat:@"PTTH/1.0"]);
+//			CFHTTPMessageSetHeaderFieldValue(response, (CFStringRef)@"Connection", (CFStringRef)[NSString stringWithFormat:@"Upgrade"]);
 			//CFHTTPMessageSetBody(response, (CFDataRef)data);
 			[mess setResponse:response];
 			CFRelease(response);
 			
 			return;
             
+        }else if([[uri absoluteString] containsString:@"/stream"]){
+            NSData *Body = [(NSData *)CFHTTPMessageCopyBody(request) autorelease];
+			NSString *bodyString = [[NSString alloc] initWithData:Body encoding:NSASCIIStringEncoding];
+            NSLog(@"Body: %@", bodyString);
         }
 		else if ([[uri absoluteString] containsString:@"/reverse"])
 		{
