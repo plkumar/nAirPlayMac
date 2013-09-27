@@ -1,4 +1,5 @@
 #import "HTTPServer.h"
+#import "NSString+Extensions.h"
 
 
 @implementation HTTPServer
@@ -283,7 +284,7 @@
 		case NSStreamEventHasBytesAvailable:;
 			uint8_t buf[16 * 1024];
 			uint8_t *buffer = NULL;
-			unsigned int len = 0;
+			NSUInteger len = 0;
 			if (![istream getBuffer:&buffer length:&len]) {
 				int amount = [istream read:buf maxLength:sizeof(buf)];
 				buffer = buf;
@@ -348,7 +349,8 @@
         NSURL *uri = [(NSURL *)CFHTTPMessageCopyRequestURL(request) autorelease];
 		NSLog(@"uri : %@",[uri absoluteURL]);
 
-		if ([[uri absoluteString] hasPrefix:@"/server-info"] || [[uri absoluteString] hasSuffix:@"/server-info"])
+		//if ([[uri absoluteString] hasPrefix:@"/server-info"] || [[uri absoluteString] hasSuffix:@"/server-info"])
+        if([[uri absoluteString] containsString:@"/server-info" inString:[uri absoluteString]])
 		{
 			
 //			NSData *data = [[NSString stringWithFormat:@"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\
@@ -393,7 +395,7 @@
 			CFHTTPMessageSetHeaderFieldValue(response, (CFStringRef)@"Date", (CFStringRef)[NSString stringWithFormat:@"%@",date]);
 
 			CFHTTPMessageSetHeaderFieldValue(response, (CFStringRef)@"Content-Type", (CFStringRef)[NSString stringWithFormat:@"application/x-apple-plist+xml"]);
-			CFHTTPMessageSetHeaderFieldValue(response, (CFStringRef)@"Content-Length", (CFStringRef)[NSString stringWithFormat:@"%d", [data length]]);
+			CFHTTPMessageSetHeaderFieldValue(response, (CFStringRef)@"Content-Length", (CFStringRef)[NSString stringWithFormat:@"%lu", (unsigned long)[data length]]);
 			CFHTTPMessageSetHeaderFieldValue(response, (CFStringRef)@"X-Apple-Session-Id", (CFStringRef)[NSString stringWithFormat:@"00000000-0000-0000-0000-000000000000"]);
 			
 			
@@ -404,7 +406,7 @@
 			return;
 			
 		}
-		if ([[uri absoluteString] hasPrefix:@"/slideshow-features"])
+		if ([[uri absoluteString] containsString:@"/slideshow-features"])
 		{
 			
 			
@@ -455,7 +457,7 @@
 			
 		}
 		
-		else if ([[uri absoluteString] hasPrefix:@"/playback-info"]||[[uri absoluteString] hasSuffix:@"/playback-info"])
+		else if ([[uri absoluteString] containsString:@"/playback-info"])
 		{
 		
 			if (delegate && [delegate respondsToSelector:@selector(airplayDidAskPosition)]) { 
@@ -467,9 +469,20 @@
 			}	
 			
 
-			NSNumber * duration = [NSNumber numberWithInt:100];
+			//NSNumber * duration = [NSNumber numberWithInt:100];
 			
-			NSString *resp = [NSString stringWithFormat:@"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n \
+//			NSString *resp = [NSString stringWithFormat:@"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n \
+//							  <!DOCTYPE plist PUBLIC \"-//Apple//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">\n \
+//							  <plist version=\"1.0\">\n \
+//							  <dict>\n \
+//							  \t<key>duration</key>\n \
+//							  \t<real>0.0</real>\n \
+//							  \t<key>position</key>\n \
+//							  \t<real>0.0</real>\n \
+//							  </dict>\n \
+//							  </plist>",[duration floatValue],_playPosition];
+            
+            NSString *resp = [NSString stringWithFormat:@"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n \
 							  <!DOCTYPE plist PUBLIC \"-//Apple//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">\n \
 							  <plist version=\"1.0\">\n \
 							  <dict>\n \
@@ -478,7 +491,7 @@
 							  \t<key>position</key>\n \
 							  \t<real>0.0</real>\n \
 							  </dict>\n \
-							  </plist>",[duration floatValue],_playPosition];
+							  </plist>"];
 			
 			NSData *data = [resp dataUsingEncoding: NSASCIIStringEncoding];
 			
@@ -486,7 +499,7 @@
 			CFHTTPMessageRef response = CFHTTPMessageCreateResponse(kCFAllocatorDefault, 200, NULL, kCFHTTPVersion1_1); // OK
 			CFHTTPMessageSetHeaderFieldValue(response, (CFStringRef)@"Date", (CFStringRef)[NSString stringWithFormat:@"%@",date]);
 			CFHTTPMessageSetHeaderFieldValue(response, (CFStringRef)@"Content-Type", (CFStringRef)[NSString stringWithFormat:@"text/x-apple-plist+xml"]);
-			CFHTTPMessageSetHeaderFieldValue(response, (CFStringRef)@"Content-Length", (CFStringRef)[NSString stringWithFormat:@"%d", [data length]]);
+			CFHTTPMessageSetHeaderFieldValue(response, (CFStringRef)@"Content-Length", (CFStringRef)[NSString stringWithFormat:@"%lu", (unsigned long)[data length]]);
 			CFHTTPMessageSetBody(response, (CFDataRef)data);
 			
 			[mess setResponse:response];
@@ -543,7 +556,7 @@
 		NSURL *uri = [(NSURL *)CFHTTPMessageCopyRequestURL(request) autorelease];
 		NSLog(@"(POST) URI : %@",uri);
 		
-		if ([[uri absoluteString] hasPrefix:@"/reverse"] || [[uri absoluteString] hasSuffix:@"/reverse"])
+		if ([[uri absoluteString] containsString:@"/reverse"])
 		{
 			
 						
@@ -558,7 +571,7 @@
 			return;
 			
 		}
-		else if ([[uri absoluteString] hasPrefix:@"/play"]|| [[uri absoluteString] hasSuffix:@"/play"])
+		else if ([[uri absoluteString] containsString:@"/play"])
 		{
 			
 			_playPosition = 0;
@@ -567,7 +580,7 @@
 			
 			NSLog(@"(POST-Play) Body : %@",bodyString);
 			
-			if ([bodyString hasPrefix:@"Content-Location: "])
+			if ([bodyString containsString:@"Content-Location: "])
 			{
 				NSString *url1 = [bodyString substringFromIndex:18];
 				
@@ -622,7 +635,7 @@
 			return;
 			
 		}
-		else if ([[uri absoluteString] hasPrefix:@"/stop"]|| [[uri absoluteString] hasSuffix:@"/stop"])
+		else if ([[uri absoluteString] containsString:@"/stop"])
 		{
 			
 			
@@ -640,10 +653,10 @@
 			
 		}
 		
-		else if ([[uri absoluteString] hasPrefix:@"/rate?value="])
+		else if ([[uri absoluteString] containsString:@"/rate?value="])
 		{
 			
-			if ([[uri absoluteString] hasPrefix:@"/rate?value=1"])	
+			if ([[uri absoluteString] containsString:@"/rate?value=1"])
 			{
 				if (delegate && [delegate respondsToSelector:@selector(videoDidPauseOrPlay:)]) { 
 					[delegate videoDidPauseOrPlay:FALSE];
@@ -668,7 +681,7 @@
 			
 		}
 		//else if ([[uri absoluteString] hasPrefix:@"/scrub?position="])
-        else if ([[uri absoluteString] rangeOfString:@"/scrub?position="].location != NSNotFound)
+        else if ([[uri absoluteString] containsString:@"/scrub?position="])
 		{
 			
 			
@@ -700,7 +713,7 @@
 		NSURL *uri = [(NSURL *)CFHTTPMessageCopyRequestURL(request) autorelease];
 		NSLog(@"(PUT) URI : %@",uri);
 		
-		if ([[uri absoluteString] hasPrefix:@"/photo"] || [[uri absoluteString] hasSuffix:@"/photo"])
+		if ([[uri absoluteString] containsString:@"/photo"] )
 		{
 			
 			NSData *Body = [(NSData *)CFHTTPMessageCopyBody(request) autorelease];
@@ -710,7 +723,7 @@
 			}					
 			
 		}
-		else if ([[uri absoluteString] hasPrefix:@"/slideshows"]|| [[uri absoluteString] hasSuffix:@"/slideshows"])
+		else if ([[uri absoluteString] containsString:@"/slideshows"])
 		{
 			
 			NSData *Body = [(NSData *)CFHTTPMessageCopyBody(request) autorelease];

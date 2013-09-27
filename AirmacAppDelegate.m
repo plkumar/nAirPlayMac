@@ -9,6 +9,7 @@
 #import "AirmacAppDelegate.h"
 #import <SystemConfiguration/SystemConfiguration.h>
 #import <AppKit/AppKit.h>
+#import "NSString+Extensions.h"
 
 @implementation AirmacAppDelegate
 
@@ -19,7 +20,7 @@
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
 	
 
-	[self checkForUpdates];
+	//[self checkForUpdates];
 	
 	[NSTimer scheduledTimerWithTimeInterval:1.0
 									 target:self
@@ -49,13 +50,13 @@
     [server setType:@"_airplay._tcp."]; // Registering airplay service
 	[server setPort:7000];
     
-    server1 = [[HTTPServer alloc] init];
-    [server1 setType:@"_airplay._tcp."]; // Registering airplay service
-	[server1 setPort:7100];
+//    server1 = [[HTTPServer alloc] init];
+//    [server1 setType:@"_airplay._tcp."]; // Registering airplay service
+//	[server1 setPort:7100];
 	
 	NSString *name = NSMakeCollectable(SCDynamicStoreCopyComputerName(NULL, NULL));
 	
-    [server setName:[NSString stringWithFormat:@"%@ - Airmac",name]]; // Name of the Service
+    [server setName:[NSString stringWithFormat:@"%@ - nAirPlayMac",name]]; // Name of the Service
 	[server setAirplayDelegate:self];
 	[server setDelegate:self];
 	
@@ -74,6 +75,11 @@
 {
 	NSError *err = [[[NSError alloc] init] autorelease];
 	NSString *url = [[NSString stringWithFormat:@"http://sizzit.nl/airmacversion.txt"] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    
+//    if([url containsString:@"Nothing" inString:url]){
+//        NSLog(@"Your method works");
+//    }
+    
 	NSString *myTxtFile = [NSString stringWithContentsOfURL:[NSURL URLWithString:url] encoding:NSUTF8StringEncoding error:&err];
 	if(err.code != 0) {
 		
@@ -103,10 +109,10 @@
 
 - (void) startServer
 {
-    NSError *errorServer1;
-    if(![server1 start:&errorServer1]){
-        NSLog(@"Error Starting Server1");
-    }
+//    NSError *errorServer1;
+//    if(![server1 start:&errorServer1]){
+//        NSLog(@"Error Starting Server1");
+//    }
     
 	NSError *startError = nil;
     if (![server start:&startError] ) {
@@ -139,7 +145,7 @@
     } else {
 		_serverIsStarted = TRUE;
 		[self toggleServerStatusMenuItem:YES];
-        NSLog(@"Server gestart op poort %d", [server port]);
+        NSLog(@"Server started on Port: %d", [server port]);
     }
 	
 }
@@ -153,12 +159,12 @@
 
 	if (started)
 	{
-		[serverStatus setTitle:@"Server successfully started"];
+		[serverStatus setTitle:@"Server successfully started."];
 		[serverStatus setImage:[NSImage imageNamed:@"Started.png"]];
 		[toggleServer setTitle:@"Stop server"]; 
 	}
 	else {
-		[serverStatus setTitle:@"Server not started"];
+		[serverStatus setTitle:@"Server failed to start."];
 		[serverStatus setImage:[NSImage imageNamed:@"Notstarted.PNG"]];
 		[toggleServer setTitle:@"Start server"]; 
 	}
