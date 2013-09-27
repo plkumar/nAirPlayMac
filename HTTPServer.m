@@ -141,7 +141,7 @@
 // request available.
 - (BOOL)processIncomingBytes {
 	
-	NSLog(@"processIncomingBytes");
+	//NSLog(@"processIncomingBytes");
 	
     CFHTTPMessageRef working = CFHTTPMessageCreateEmpty(kCFAllocatorDefault, TRUE);
     CFHTTPMessageAppendBytes(working, [ibuffer bytes], [ibuffer length]);
@@ -325,7 +325,7 @@
 	
 /*    NSString *vers = [(id)CFHTTPMessageCopyVersion(request) autorelease];
     if (!vers) {
-		NSLog(@"Geen vers!!");
+		NSLog(@"Version not supported!!");
         CFHTTPMessageRef response = CFHTTPMessageCreateResponse(kCFAllocatorDefault, 505, NULL, (CFStringRef)vers); // Version Not Supported
         [mess setResponse:response];
         CFRelease(response);
@@ -334,7 +334,7 @@
 	
     NSString *method = [(id)CFHTTPMessageCopyRequestMethod(request) autorelease];
  /*   if (!method) {
-		NSLog(@"Geen method!!");
+		NSLog(@"Method not found!!");
 
         CFHTTPMessageRef response = CFHTTPMessageCreateResponse(kCFAllocatorDefault, 400, NULL, kCFHTTPVersion1_1); // Bad Request
         [mess setResponse:response];
@@ -364,7 +364,7 @@
                              \t<key>protovers</key>\n\
                              \t<string>1.0</string>\n\
                              \t<key>srcvers</key>\n\
-                             \t<string>101.28</string>\n\
+                             \t<string>120.2</string>\n\
                              </dict>\n\
                              </plist>\n"] dataUsingEncoding: NSASCIIStringEncoding];
 			 
@@ -457,15 +457,15 @@
 			//NSNumber * duration = [NSNumber numberWithInt:100];
 			
 //			NSString *resp = [NSString stringWithFormat:@"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n \
-//							  <!DOCTYPE plist PUBLIC \"-//Apple//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">\n \
-//							  <plist version=\"1.0\">\n \
-//							  <dict>\n \
-//							  \t<key>duration</key>\n \
-//							  \t<real>0.0</real>\n \
-//							  \t<key>position</key>\n \
-//							  \t<real>0.0</real>\n \
-//							  </dict>\n \
-//							  </plist>",[duration floatValue],_playPosition];
+//					<!DOCTYPE plist PUBLIC \"-//Apple//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">\n \
+//					<plist version=\"1.0\">\n \
+//					<dict>\n \
+//	    			\t<key>duration</key>\n \
+//		    	    \t<real>0.0</real>\n \
+//		    	    \t<key>position</key>\n \
+//					\t<real>0.0</real>\n \
+//					</dict>\n \
+//					</plist>",[duration floatValue],_playPosition];
             
             NSString *resp = [NSString stringWithFormat:@"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n \
 							  <!DOCTYPE plist PUBLIC \"-//Apple//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">\n \
@@ -556,7 +556,7 @@
 			return;
 			
 		}
-		else if ([[uri absoluteString] containsString:@"/play"])
+		else if ([[uri absoluteString] hasSuffix:@"/play"])
 		{
 			
 			_playPosition = 0;
@@ -622,13 +622,10 @@
 		}
 		else if ([[uri absoluteString] containsString:@"/stop"])
 		{
-			
-			
-			
+
 			if (delegate && [delegate respondsToSelector:@selector(videoClosed)]) { 
 				[delegate videoClosed];
 			}
-			
 			
 			CFHTTPMessageRef response = CFHTTPMessageCreateResponse(kCFAllocatorDefault, 200, NULL, kCFHTTPVersion1_1); // OK
 			[mess setResponse:response];

@@ -85,14 +85,13 @@
 		080E96DDFE201D6D7F000001 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				2A2AA0E517F5979900D9CB86 /* Utility */,
 				FE70A4C71379C6330045737E /* TCPServer.h */,
 				FE70A4C81379C6330045737E /* TCPServer.m */,
 				FE70A4C51379C6330045737E /* HTTPServer.h */,
 				FE70A4C61379C6330045737E /* HTTPServer.m */,
 				256AC3D80F4B6AC300CF3369 /* AirmacAppDelegate.h */,
 				256AC3D90F4B6AC300CF3369 /* AirmacAppDelegate.m */,
-				2A2AA0E217F5697600D9CB86 /* NSString+Extensions.h */,
-				2A2AA0E317F5697600D9CB86 /* NSString+Extensions.m */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -175,6 +174,15 @@
 				1058C7A2FEA54F0111CA2CBB /* Other Frameworks */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		2A2AA0E517F5979900D9CB86 /* Utility */ = {
+			isa = PBXGroup;
+			children = (
+				2A2AA0E317F5697600D9CB86 /* NSString+Extensions.m */,
+				2A2AA0E217F5697600D9CB86 /* NSString+Extensions.h */,
+			);
+			name = Utility;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
